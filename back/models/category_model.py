@@ -15,10 +15,10 @@ class Category(BaseModel):
 
 @validates('name')
 def validate_name(self, key, name):
-    if not name:
-        raise ValueError("The name can't be empty")
     if not isinstance(name, str):
         raise TypeError("The name must be a string")
+    if not name.strip():
+        raise ValueError("The name can't be empty")
     if not len(name) > 100:
         raise ValueError("The name can't exceed 100 characters")
     return name
