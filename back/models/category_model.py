@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, String
 from sqlalchemy.orm import validates
 from back.models.base_model import BaseModel
 
@@ -13,21 +13,21 @@ class Category(BaseModel):
         self.description = description
 
 
-@validates('name')
-def validate_name(self, key, name):
-    if not isinstance(name, str):
-        raise TypeError("The name must be a string")
-    if not name.strip():
-        raise ValueError("The name can't be empty")
-    if not len(name) > 100:
-        raise ValueError("The name can't exceed 100 characters")
-    return name
+    @validates('name')
+    def validate_name(self, key, name):
+        if not isinstance(name, str):
+            raise TypeError("The name must be a string")
+        if not name.strip():
+            raise ValueError("The name can't be empty")
+        if len(name) > 100:
+            raise ValueError("The name can't exceed 100 characters")
+        return name
 
 
-@validates('description')
-def validate_description(self, key, description):
-    if not isinstance(description, str):
-        raise TypeError("The description must be a string!")
-    if len(description) > 255:
-        raise ValueError("The description can't exceed 255 or less characters!")
-    return description
+    @validates('description')
+    def validate_description(self, key, description):
+        if not isinstance(description, str):
+            raise TypeError("The description must be a string!")
+        if len(description) > 255:
+            raise ValueError("The description can't exceed 255 or less characters!")
+        return description
