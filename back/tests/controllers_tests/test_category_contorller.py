@@ -13,6 +13,13 @@ class TestCategoryController:
         controller = CategoryController()
         return controller
 
+    @pytest.fixture
+    def create_instance(self):
+        name = 'Category name'
+        description = 'Category description'
+        category = Category(name, description)
+        return category
+
     def test_category_controller_instance(self, create_controller):
         assert isinstance(create_controller, BaseController)
         assert isinstance(create_controller, CategoryController)
@@ -21,22 +28,15 @@ class TestCategoryController:
         result = create_controller.read_all()
         assert isinstance(result, list)
 
-    def test_create_category(self, create_controller):
-        name = 'Category name'
-        description = 'Category description'
-        category = Category(name, description)
-        result = create_controller.create(category)
+    def test_create_category(self, create_controller, create_instance):
+        result = create_controller.create(create_instance)
         assert result.id_ is not None
-        assert result.name == name
-        assert result.description == description
+        assert result.name == create_instance.name
+        assert result.description == create_instance.description
         create_controller.delete(result)
 
-    def test_update_category(self, create_controller):
-        name = 'Category name'
-        description = 'Category description'
-        category = Category(name, description)
-
-        created = create_controller.create(category)
+    def test_update_category(self, create_controller, create_instance):
+        created = create_controller.create(create_instance)
         created.name = 'Category name 2'
         created.description = 'Category description 2'
 
@@ -46,29 +46,22 @@ class TestCategoryController:
         assert result.description == 'Category description 2'
         create_controller.delete(result)
 
-    def test_delete_category(self, create_controller):
-        name = 'Category'
-        description = 'Test'
-        category = Category(name, description)
-        created = create_controller.create(category)
+    def test_delete_category(self, create_controller, create_instance):
+        created = create_controller.create(create_instance)
         create_controller.delete(created)
         with pytest.raises(Exception) as exc:
             create_controller.read_by_id(created.id_)
             assert exc.value == 'Object not found in the database.'
 
-    def test_read_by_id_should_return_category(self, create_controller):
-        name = 'Category'
-        description = 'Test'
-        category = Category(name, description)
-        created = create_controller.create(category)
-
+    def test_read_by_id_should_return_category(self, create_controller, create_instance):
+        created = create_controller.create(create_instance)
         result = create_controller.read_by_id(created.id_)
         assert isinstance(result, Category)
-        assert result.name == name
-        assert result.description == description
+        assert result.name == create_instance.name
+        assert result.description == create_instance.description
         create_controller.delete(created)
 
     def test_read_by_id_with_invalid_id_should_raise_exception(self, create_controller):
         with pytest.raises(Exception) as exc:
-            create_controller.read_by_id(71289379)
+            create_controller.read_by_id(999999)
             assert exc.value == 'Object not found in the database.'
