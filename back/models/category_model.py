@@ -1,7 +1,6 @@
 from sqlalchemy import Column, String
 from sqlalchemy.orm import validates
 from back.models.base_model import BaseModel
-
 from back.utils.validators import (
     validate_len, 
     validate_not_empty,
@@ -10,7 +9,7 @@ from back.utils.validators import (
 
 
 class Category(BaseModel):
-    __tablename__ = 'category'
+    __tablename__ = 'CATEGORY'
     name = Column('name', String(length=100), nullable = False)
     description = Column('description', String(length=255), nullable = True)
 
