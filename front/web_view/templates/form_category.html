@@ -1,0 +1,42 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" 
+rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" 
+crossorigin="anonymous">
+{% extends 'template.html' %}
+{% block body %}
+
+{% if action == 'Create' %}
+    <form action="/category/create" method="post" class="row g-3">
+    {% set id_ = '' %}
+    {% set name = '' %}
+    {% set description = ''  %}
+{% endif %}
+
+{% if action == 'Update' %}
+<form action="/category/update/{{category.id}}" method="post" class="row g-3">
+    {% set id_ = category.id_ %}
+    {% set name = category.name %}
+    {% set description = category.description  %}
+{% endif %}
+        <input type="text" name="id_" id="id_" value="{{id_}}" hidden>
+
+        <div class="row mb-3">
+            <label class="form-label" for="name">Name</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="name" id="name" value="{{name}}">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <label class="form-label" for="description">Description</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="description" id="description" value="{{description}}">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-8">
+                <button class="btn btn-primary" style="float: right" type="submit">Create</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
